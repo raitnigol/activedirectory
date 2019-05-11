@@ -28,16 +28,18 @@
 # kui skripti ei jooksutata Windows Serveri peal, millel oleks Active Directory olemas,
 # võib see koodijupp errorit visata.
 # Seega peame alguses proovima, kas moodulit on võimalik importida ning kui ei ole,
-# püütakse error kinni ning talletatakse tekstifailis errors.txt, mis asub töölaual.
+# kuvatakse kasutajale, et midagi on valesti ning error talletatakse failis C:\CSV\errors.txt
 $module = $("activedirectory")
 Try {
     Start-Sleep -s 1
     Import-Module $module 
 }
+
 Catch {
     # kui kood lööb errorit, väljastatakse veateade.
+    Import-Module $module 2>> C:\CSV\errors.txt
     Write-Warning "Miskit läks valesti. moodulit $module pole võimalik importida"
-    Write-Warning "Error salvestatud töölauale faili errors.txt"
+    Write-Warning "Error salvestatud asukohta C:\CSV\errors.txt"
     Start-Sleep -s 4
     Exit
 }
@@ -47,7 +49,8 @@ echo ===== KASUTAJAINFO =====
 
 # Võtame CSV faili ning talletame selle info muutujasse $kasutajad.
 # $kasutajad = Import-Csv -Path KETAS:\Asukoht\Sinu\Failini.csv
-$kasutajad = Import-Csv -Path C:\Users\piigu\Desktop\DATA.csv
+# PALUN ASETADA CSV FAIL ASUKOHTA C:\CSV\DATA.csv !!!!!
+$kasutajad = Import-Csv -Path C:\CSV\DATA.csv
 
 # Iga kasutaja kohta, kes asub meie failis, väljastame me muutujad $kasutajanimi
 # $perekonnanimi ning $roll
@@ -62,6 +65,7 @@ $zipcode = $('666666')
 $streetaddress = $("Sillaaluse 33")
 $state = $("Tartumaa")
 
+# nüüd loome muutujad, mis on pidevas muutuses ning ei jää kõikidele kasutajatele samaks.
 ForEach ($user in $kasutajad)
 {
     $Firstname = $($user.eesnimi)
@@ -72,11 +76,11 @@ ForEach ($user in $kasutajad)
     $principalname = $("$Username@$domain")
     $email = $("$Username@$gmail").ToLower()
 
-    # enne kui AD teekonna (Pathi) on meil valida kahe kausta vahelt.
+    # enne kui loome AD teekonna (Pathi) on meil valida kahe kausta vahelt.
     # Mõned töötajad lähevad alamkausta Vaki, samas kui teised lähevad Massusse.
     # peame looma if statementi, mis tuvastaks ära, kuhu antud inimese asetama peab.
     
-    # inimesed, kes töötavad massus - 
+    # inimesed, kes töötavad Massus - 
     if ($jobtitle -eq "IT") {
         $massu = $("OU=Massu")
         $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$massu,DC=mukri,DC=sise")
@@ -92,7 +96,7 @@ ForEach ($user in $kasutajad)
         $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$massu,DC=mukri,DC=sise")
         }
 
-    #inimesed, kes töötavad vakis -
+    #inimesed, kes töötavad Vakis -
     if ($jobtitle -eq "Giidid") {
         $vaki = $("OU=Vaki")
         $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$vaki,DC=mukri,DC=sise")
@@ -130,8 +134,6 @@ else
     -Title $jobtitle
     -Department $jobtitle
     -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True
-
-
 }
 
 }
