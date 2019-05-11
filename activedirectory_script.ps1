@@ -94,7 +94,7 @@ ForEach ($user in $kasutajad)
     if (Get-ADUser -F {SamAccountName -eq $Username})
     {
     # Kui kasutaja eksisteerib, anname sellest kasutajale teada.
-        Write-Warning "Kasutaja $Username juba eksisteerib Active Directorys!"
+        Write-Warning "Kasutaja $Username (Roll: $jobtitle) juba eksisteerib Active Directorys!"
     }
     else
     {
