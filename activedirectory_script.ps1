@@ -110,30 +110,30 @@ ForEach ($user in $kasutajad)
 # $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$it,DC=mukri,DC=sise")
 
 # Kontrollime üle, kas antud kasutaja juba asub Active Directorys või mitte.
-if (Get-ADUser -F {SamAccountName -eq $Username})
-{
+    if (Get-ADUser -F {SamAccountName -eq $Username})
+    {
     # Kui kasutaja eksisteerib, anname sellest kasutajale teada.
-    Write-Warning "Kasutaja $Username juba eksisteerib Active Directorys!"
-}
-else
-{
+        Write-Warning "Kasutaja $Username juba eksisteerib Active Directorys!"
+    }
+    else
+    {
     # Kui kasutaja ei eksisteeri AD-s, siis loome selle kasutaja.
-    New-ADUser
-    -SamAccountName $Username
-    -UserPrincipalName $principalname
-    -Name "$Firstname $Lastname"
-    -GivenName $Firstname
-    -Surname $Lastname
-    -Enabled $True
-    -DisplayName "Lastname, $Firstname"
-    -Path $OU
-    -City $city
-    -Company $company
-    -State $state
-    -EmailAddress $email
-    -Title $jobtitle
-    -Department $jobtitle
-    -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True
-}
+        New-ADUser
+        -SamAccountName $Username
+        -UserPrincipalName $principalname
+        -Name "$Firstname $Lastname"
+        -GivenName $Firstname
+        -Surname $Lastname
+        -Enabled $True
+        -DisplayName "Lastname, $Firstname"
+        -Path $OU
+        -City $city
+        -Company $company
+        -State $state
+        -EmailAddress $email
+        -Title $jobtitle
+        -Department $jobtitle
+        -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True
+    }
 
 }
