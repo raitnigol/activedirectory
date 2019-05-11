@@ -24,19 +24,20 @@
     ehk Rait.Nigol IT.
 #>
 
+# kasutaja peab sisestama CSV faili asukoh
 # Importime kõigepealt activedirectory mooduli, et skript üldse töötaks.
 # kui skripti ei jooksutata Windows Serveri peal, millel oleks Active Directory olemas,
 # võib see koodijupp errorit visata.
 # Seega peame alguses proovima, kas moodulit on võimalik importida ning kui ei ole,
-# kuvatakse kasutajale, et midagi on valesti.
-
+# kuvatakse kasutajale, et midagi on valesti ning fail talletatakse samma kohta, kus asub
+# skript.
 Try {
     Start-Sleep -s 1
     Import-Module activedirectory
 }
 Catch {
     # kui kood lööb errorit, väljastatakse veateade.
-    Import-Module $module 2>> C:\CSV\errors.txt
+    Import-Module activedirectory 2>> C:\CSV\errors.txt
     Write-Warning "Miskit läks valesti. moodulit $module pole võimalik importida"
     Write-Warning "Error salvestatud asukohta C:\CSV\errors.txt"
     Start-Sleep -s 4
@@ -50,8 +51,6 @@ echo ===== KASUTAJAINFO =====
 # Võtame CSV faili ning talletame selle info muutujasse $kasutajad.
 # $kasutajad = Import-Csv -Path KETAS:\Asukoht\Sinu\Failini.csv
 # PALUN ASETADA CSV FAIL ASUKOHTA C:\CSV\DATA.csv !!!!!
-
-$kasutajad = Import-Csv -Path C:\CSV\DATA.csv
 
 # Iga kasutaja kohta, kes asub meie failis, väljastame me muutujad erinevad muutujad.
 
@@ -82,23 +81,23 @@ ForEach ($user in $kasutajad)
     # inimesed, kes töötavad Massus - 
     if ($jobtitle -eq "IT") {
         $massu = $("IT")
-        $OU = $("OU=$massu,DC=mukri,DC=sise")
+        $OU = $("OU=$jobtitle,OU=$massu,DC=mukri,DC=sise")
         }
 
     if ($jobtitle -eq "Turundusosakond") {
         $massu = $("Turundusosakond")
-        $OU = $("OU=$massu,DC=mukri,DC=sise")
+        $OU = $("OU=$jobtitle,OU=$massu,DC=mukri,DC=sise")
         }
 
     #inimesed, kes töötavad Vakis -
     if ($jobtitle -eq "Giidid") {
         $vaki = $("Giidid")
-        $OU = $("OU=$vaki,DC=mukri,DC=sise")
+        $OU = $("OU=$jobtitle,OU=$vaki,DC=mukri,DC=sise")
         }
 
     if ($jobtitle -eq "Raamatupidamine") {
         $vaki = $("Raamatupidamine")
-        $OU = $("OU=$vaki,DC=mukri,DC=sise")
+        $OU = $("OU=$jobtitle,OU=$vaki,DC=mukri,DC=sise")
         }
 
 # $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$it,DC=mukri,DC=sise")
@@ -112,22 +111,7 @@ ForEach ($user in $kasutajad)
     else
     {
     # Kui kasutaja ei eksisteeri AD-s, siis loome selle kasutaja.
-        New-ADUser `
-            -SamAccountName $Username `
-            -UserPrincipalName $principalname `
-            -Name "$Firstname $Lastname" `
-            -GivenName $Firstname `
-            -Surname $Lastname `
-            -Enabled $True `
-            -DisplayName "Lastname, $Firstname" `
-            -Path $OU `
-            -City $city `
-            -Company $company `
-            -State $state `
-            -EmailAddress $email `
-            -Title $jobtitle `
-            -Department $jobtitle 
-            -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True
+        New-ADUser -SamAccountName $Username -UserPrincipalName $principalname -Name "$Firstname $Lastname" -GivenName $Firstname -Surname $Lastname -Enabled $True -DisplayName "Lastname, $Firstname" -Path $OU -City $city -Company $company -State $state -EmailAddress $email -Title $jobtitle -Department $jobtitle -AccountPassword (convertto-securestring $Password -AsPlainText -Force) -ChangePasswordAtLogon $True
     }
 
 }
