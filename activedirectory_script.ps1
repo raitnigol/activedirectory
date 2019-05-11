@@ -81,29 +81,24 @@ ForEach ($user in $kasutajad)
     
     # inimesed, kes töötavad Massus - 
     if ($jobtitle -eq "IT") {
-        $massu = $("OU=Massu")
-        $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$massu,DC=mukri,DC=sise")
+        $massu = $("IT")
+        $OU = $("OU=$massu,DC=mukri,DC=sise")
         }
 
     if ($jobtitle -eq "Turundusosakond") {
-        $massu = $("OU=Massu")
-        $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$massu,DC=mukri,DC=sise")
-        }
-
-    if ($jobtitle -eq "Turundusosakond") {
-        $massu = $("OU=Massu")
-        $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$massu,DC=mukri,DC=sise")
+        $massu = $("Turundusosakond")
+        $OU = $("OU=$massu,DC=mukri,DC=sise")
         }
 
     #inimesed, kes töötavad Vakis -
     if ($jobtitle -eq "Giidid") {
-        $vaki = $("OU=Vaki")
-        $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$vaki,DC=mukri,DC=sise")
+        $vaki = $("Giidid")
+        $OU = $("OU=$vaki,DC=mukri,DC=sise")
         }
 
     if ($jobtitle -eq "Raamatupidamine") {
-        $vaki = $("OU=Vaki")
-        $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$vaki,DC=mukri,DC=sise")
+        $vaki = $("Raamatupidamine")
+        $OU = $("OU=$vaki,DC=mukri,DC=sise")
         }
 
 # $OU = $("CN=$Firstname $Lastname,OU=$jobtitle,OU=Inimesed,$it,DC=mukri,DC=sise")
