@@ -77,16 +77,14 @@ ForEach ($user in $kasutajad)
     # enne kui loome j2rgmised muutujad, peame paika panema m6ned staatilised muutujad
     # loome domeeni mukri.sise
     $domain = $("mukri.sise")
-    # loome kasutajale gmaili l6pu, mis hiljem liidetakse emailile, et saada email
-    # kujul (rait.nigol@gmail.com)
-    $gmail = $("gmail.com")
+    # loome kasutajale emaili aadressi kujul (rait.nigol@mukri.sise)
+    $email = $("$Username@$domain").ToLower()
     # loome igale kasutajale sama parooli, sest niikuinii on see tarvis j2rgmisel
     # sisselogimisel 2ra muuta
     $Password = $("Passw0rd")
     # loome kasutajale peamise nime kujul kasutajanimi@domeen (rait.nigol@mukri.sise)
     $principalname = $("$Username@$domain")
     # loome kasutajale emaili kasutades muutuja $gmail abi.
-    $email = $("$Username@$gmail").ToLower()
 
 <# 
     Meie systeemis on kaks alamkausta - Massu ja Vaki.
