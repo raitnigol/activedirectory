@@ -1,2 +1,2 @@
 ﻿firstname,lastname,username,jobtitle,domain,OU,email,password,principalname,
-John,Doe,johndoe,Nice Guy,OU=niceguys,OU=gamers,DC=yourdomain,DC=local,johndoe@gmail.com,Passw0rd,Nice Guy,
+John,Doe,johndoe,Nice Guy,OU=yourOU,johndoe@gmail.com,Passw0rd,Nice Guy,
