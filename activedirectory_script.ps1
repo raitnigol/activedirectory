@@ -58,7 +58,9 @@ Catch {
     staatilised kui ka muutuvad.
 #>
 
-$kasutajad = Import-Csv C:\CSV\DATA.csv
+$csv = Read-Host -Prompt "Palun sisesta teekond CSV failini (tiri fail siia): "
+
+$kasutajad = Import-Csv $csv
 
     # iga kasutaja kohta CSV failis me loome neile staatilised muutujad
     # kui ka muutuvad muutujad.
@@ -142,3 +144,4 @@ ForEach ($user in $kasutajad)
     }
 
 }
+

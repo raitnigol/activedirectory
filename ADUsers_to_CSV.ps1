@@ -44,7 +44,7 @@ Catch {
     If the code succeeds, we will import the CSV file
     from the usen given location.
 #>
-$csv = Read-Host -Prompt "Please input the path for the CSV file (drag file here): "
+$csv = Read-Host -Prompt "Please input the path for the CSV file (drag the file here): "
 
 $users = Import-Csv $csv
 
